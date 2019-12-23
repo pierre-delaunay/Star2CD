@@ -13,6 +13,8 @@ import fr.istic.mob.star2cd.R;
 
 public class BusRouteFragment extends Fragment {
 
+    // https://developer.android.com/training/basics/fragments/communicating.html
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
