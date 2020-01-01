@@ -7,18 +7,10 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <fragment
-        android:id="@+id/busRouteFragment"
-        android:layout_weight="1"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        class="fr.istic.mob.star2cd.fragments.BusRouteFragment" />
-
-    <fragment
-        android:id="@+id/stopFragment"
-        android:layout_weight="1"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        class="fr.istic.mob.star2cd.fragments.StopFragment" />
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>

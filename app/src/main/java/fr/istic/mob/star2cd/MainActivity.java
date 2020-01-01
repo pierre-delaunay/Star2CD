@@ -13,6 +13,7 @@ import fr.istic.mob.star2cd.fragments.BusRouteFragment;
 import fr.istic.mob.star2cd.fragments.RouteDetailFragment;
 import fr.istic.mob.star2cd.fragments.StopFragment;
 import fr.istic.mob.star2cd.fragments.StopTimeFragment;
+import fr.istic.mob.star2cd.model.BusRoute;
 import fr.istic.mob.star2cd.utils.StarContract;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,19 +29,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fragmentManager = this.getSupportFragmentManager();
-        busRouteFragment = (BusRouteFragment) fragmentManager.findFragmentById(R.id.busRouteFragment);
-        stopFragment = (StopFragment) fragmentManager.findFragmentById(R.id.stopFragment);
+        //busRouteFragment = (BusRouteFragment) fragmentManager.findFragmentById(R.id.busRouteFragment);
+
+        stopFragment = StopFragment.newInstance(null, 1);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.hide(stopFragment);
+        fragmentTransaction.replace(R.id.frameLayout, stopFragment);
         fragmentTransaction.commit();
 
-        Cursor cursor = getContentResolver().query(
-                StarContract.BusRoutes.CONTENT_URI,
-                null, null, null, "_id");
-
-        while (cursor.moveToNext()) {
-            //Log.i("Cursor", "id : " + cursor.getString(0));
-        }
     }
 }
