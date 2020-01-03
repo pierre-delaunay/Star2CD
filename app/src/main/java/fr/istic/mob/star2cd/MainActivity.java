@@ -1,25 +1,25 @@
 package fr.istic.mob.star2cd;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import fr.istic.mob.star2cd.fragments.BusRouteFragment;
 import fr.istic.mob.star2cd.fragments.RouteDetailFragment;
 import fr.istic.mob.star2cd.fragments.StopFragment;
 import fr.istic.mob.star2cd.fragments.StopTimeFragment;
-import fr.istic.mob.star2cd.model.BusRoute;
-import fr.istic.mob.star2cd.utils.StarContract;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Main Activity
+ *
+ * @author Charly C, Pierre D
+ * @version 1.0.1
+ */
+public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener {
 
-    private BusRouteFragment busRouteFragment;
-    private StopFragment stopFragment;
     private StopTimeFragment stopTimesFragment;
     private RouteDetailFragment routeDetailFragment;
     private FragmentManager fragmentManager;
@@ -28,14 +28,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         fragmentManager = this.getSupportFragmentManager();
-        //busRouteFragment = (BusRouteFragment) fragmentManager.findFragmentById(R.id.busRouteFragment);
+        BusRouteFragment busRouteFragment = BusRouteFragment.newInstance();
 
-        stopFragment = StopFragment.newInstance(null, 1);
+        replaceFragment(busRouteFragment);
+    }
 
+    /**
+     * Replace current fragment with a new one
+     * Previous fragment is added to back stack
+     *
+     * @param fragment the new fragment
+     */
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, stopFragment);
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
 
+    @Override
+    public void searchOnClick() {
+        StopFragment stopFragment = StopFragment.newInstance(null, 1);
+        replaceFragment(stopFragment);
     }
 }

@@ -19,6 +19,12 @@ import fr.istic.mob.star2cd.utils.CircularTextView;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StopAdapter;
 
+/**
+ * Stop Fragment
+ *
+ * @author Charly C, Pierre D
+ * @version 1.0.1
+ */
 public class StopFragment extends Fragment {
 
     private CircularTextView busTextView;
@@ -72,7 +78,6 @@ public class StopFragment extends Fragment {
                 Toast.makeText(getContext(), " " + stopAdapter.getItem(i).getStopName(), Toast.LENGTH_SHORT).show();
             }
         });
-
 
         busTextView = (CircularTextView) view.findViewById(R.id.circularTextView);
         busTextView.setStrokeWidth(1);

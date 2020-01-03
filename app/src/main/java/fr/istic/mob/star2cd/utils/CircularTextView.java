@@ -26,7 +26,6 @@ public class CircularTextView extends AppCompatTextView {
         super(context, attrs, defStyleAttr);
     }
 
-
     @Override
     public void draw(Canvas canvas) {
 

@@ -11,6 +11,12 @@ import android.widget.TextView;
 import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.model.Stop;
 
+/**
+ * Stop Adapter
+ *
+ * @author Charly C, Pierre D
+ * @version 1.0.1
+ */
 public class StopAdapter extends CursorAdapter {
 
     private Cursor cursor;
