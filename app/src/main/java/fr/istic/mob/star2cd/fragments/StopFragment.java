@@ -1,5 +1,6 @@
 package fr.istic.mob.star2cd.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,16 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.Objects;
+
 import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.model.BusRoute;
 import fr.istic.mob.star2cd.utils.CircularTextView;
 import fr.istic.mob.star2cd.utils.StarContract;
+import fr.istic.mob.star2cd.utils.StarFactory;
 import fr.istic.mob.star2cd.utils.StopAdapter;
 
 /**
@@ -27,24 +32,39 @@ import fr.istic.mob.star2cd.utils.StopAdapter;
  */
 public class StopFragment extends Fragment {
 
-    private CircularTextView busTextView;
-    private ListView list;
-    private Cursor cursor;
-    private BusRoute busRoute;
+    private int routeId;
     private int direction;
+    private StopFragmentListener fragmentListener;
 
     public StopFragment() {
     }
 
-    private StopFragment(BusRoute busRoute, int direction) {
-        this.busRoute = busRoute;
+    private StopFragment(int routeId, int direction) {
+        this.routeId = routeId;
         this.direction = direction;
     }
 
-    public static StopFragment newInstance(BusRoute busRoute, int direction) {
-        return new StopFragment(busRoute, direction);
+    public interface StopFragmentListener {
+        void onStopClick(int stopId);
     }
 
+    public static StopFragment newInstance(int routeId, int direction) {
+        return new StopFragment(routeId, direction);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof BusRouteFragment.BusRouteFragmentListener) {
+            fragmentListener = (StopFragment.StopFragmentListener) getActivity();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentListener = null;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +79,13 @@ public class StopFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stop, container, false);
-        list = view.findViewById(R.id.list);
+        ListView list = view.findViewById(R.id.list);
 
-        String str[] = new String[2];
-        str[0] = "1";
-        str[1] = "0";
-
-        cursor = getContext().getContentResolver().query(
+        String[] params = {String.valueOf(routeId), String.valueOf(direction)};
+        //Log.i("StopFragment", routeId + " " + direction);
+        Cursor cursor = getContext().getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,
-                null, null, str, null);
+                null, null, params, null);
 
         final StopAdapter stopAdapter = new StopAdapter(getContext(), cursor);
         list.setAdapter(stopAdapter);
@@ -79,11 +97,33 @@ public class StopFragment extends Fragment {
             }
         });
 
-        busTextView = (CircularTextView) view.findViewById(R.id.circularTextView);
+        BusRoute busRoute = StarFactory.getBusRoute(getContext(), routeId);
+        CircularTextView busTextView = view.findViewById(R.id.circularTextView);
+        TextView directionTextView = view.findViewById(R.id.directionTextView);
+        Objects.requireNonNull(busRoute);
         busTextView.setStrokeWidth(1);
-        busTextView.setStrokeColor("#ffffff");
-        busTextView.setSolidColor("#ADFF2F");
+        busTextView.setText(busRoute.getRouteShortName());
+        busTextView.setStrokeColor("#" + busRoute.getRouteTextColor());
+        busTextView.setSolidColor("#" + busRoute.getRouteColor());
+        directionTextView.setText(getDirectionName(busRoute, direction));
 
         return view;
+    }
+
+    /**
+     * Returns the name of the direction
+     *
+     * @param busRoute  BusRoute
+     * @param direction Direction
+     * @return Name of the direction
+     */
+    private String getDirectionName(BusRoute busRoute, int direction) {
+        String longName = busRoute.getRouteLongName();
+        String[] splits = longName.split(" <> ");
+        if (direction == 0) {
+            return splits[0];
+        } else {
+            return splits[splits.length - 1];
+        }
     }
 }

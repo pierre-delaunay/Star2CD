@@ -17,7 +17,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +24,12 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.utils.BusRoutesAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
+import fr.istic.mob.star2cd.utils.StarFactory;
 
 /**
  * Bus Route Fragment
@@ -38,15 +39,14 @@ import fr.istic.mob.star2cd.utils.StarContract;
  */
 public class BusRouteFragment extends Fragment {
 
-    // https://developer.android.com/training/basics/fragments/communicating.html
-
     private Spinner spinnerBusLine, spinnerBusDirection;
     private Button searchButton, dateButton, timeButton;
     private EditText dateEditText, timeEditText;
     private BusRouteFragmentListener fragmentListener;
+    private int routeId, direction;
 
     public interface BusRouteFragmentListener {
-        void searchOnClick();
+        void searchOnClick(int routeId, int direction);
     }
 
     public static BusRouteFragment newInstance() {
@@ -90,8 +90,6 @@ public class BusRouteFragment extends Fragment {
         this.dateEditText = view.findViewById(R.id.dateEditText);
         this.timeEditText = view.findViewById(R.id.timeEditText);
 
-        // Hide spinner until a line has been selected by the user
-        //spinnerBusDirection.setVisibility(View.GONE);
         timeEditText.setFocusable(false);
         dateEditText.setFocusable(false);
 
@@ -113,7 +111,7 @@ public class BusRouteFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (fragmentListener != null) {
-                    fragmentListener.searchOnClick();
+                    fragmentListener.searchOnClick(routeId, direction);
                 }
             }
         });
@@ -165,7 +163,7 @@ public class BusRouteFragment extends Fragment {
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.HOUR, hour);
                 calendar1.set(Calendar.MINUTE, minute);
-                String dateText = DateFormat.format("h:mm a", calendar1).toString();
+                String dateText = DateFormat.format("hh:mm:00", calendar1).toString(); // default format : "h:mm a"
                 timeEditText.setText(dateText);
             }
         }, HOUR, MINUTE, is24HourFormat);
@@ -182,6 +180,7 @@ public class BusRouteFragment extends Fragment {
         Cursor cursor = getContext().getContentResolver().query(
                 StarContract.BusRoutes.CONTENT_URI, null, null, null, null);
 
+        Objects.requireNonNull(cursor);
         while (cursor.moveToNext()) {
             String shortName = cursor.getString(cursor.getColumnIndex(StarContract.BusRoutes.BusRouteColumns.SHORT_NAME));
             String color = cursor.getString(cursor.getColumnIndex(StarContract.BusRoutes.BusRouteColumns.COLOR));
@@ -197,8 +196,8 @@ public class BusRouteFragment extends Fragment {
         spinnerBusLine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selection = (String) parent.getItemAtPosition(position);
-                initSpinnerBusDirection(selection);
+                initSpinnerBusDirection(position + 1);
+                setRouteId(position + 1);
             }
 
             @Override
@@ -210,28 +209,42 @@ public class BusRouteFragment extends Fragment {
     /**
      * Initialize the spinner with the possible directions for this route
      *
-     * @param routeShortName selected route
+     * @param routeId Route identifier
      */
-    private void initSpinnerBusDirection(final String routeShortName) {
+    private void initSpinnerBusDirection(final int routeId) {
         this.spinnerBusDirection.setVisibility(View.VISIBLE);
-
-        //String shortName = appDatabase.busRouteDao().findRouteLongName(routeShortName);
-        String shortName = "TBD";
-        String[] splits = shortName.split(" <> ");
+        String longName = "";
+        try {
+            longName = StarFactory.getBusRoute(getContext(), routeId).getRouteLongName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String[] splits = longName.split(" <> ");
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add(splits[0]);
         arrayList.add(splits[splits.length - 1]);
+        Objects.requireNonNull(getContext());
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, arrayList);
 
         spinnerBusDirection.setAdapter(arrayAdapter);
+
+        spinnerBusDirection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setDirection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
-    /**
-     * After a click on search button
-     *
-     * @param view View
-     */
-    public void search(View view) {
-        Toast.makeText(getContext(), "Not yet implemented", Toast.LENGTH_LONG).show();
+    private void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
+
+    private void setDirection(int direction) {
+        this.direction = direction;
     }
 }

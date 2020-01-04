@@ -18,7 +18,7 @@ import fr.istic.mob.star2cd.fragments.StopTimeFragment;
  * @author Charly C, Pierre D
  * @version 1.0.1
  */
-public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener {
+public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener, StopFragment.StopFragmentListener {
 
     private StopTimeFragment stopTimesFragment;
     private RouteDetailFragment routeDetailFragment;
@@ -49,8 +49,13 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
     }
 
     @Override
-    public void searchOnClick() {
-        StopFragment stopFragment = StopFragment.newInstance(null, 1);
+    public void searchOnClick(int routeId, int direction) {
+        StopFragment stopFragment = StopFragment.newInstance(routeId, direction);
         replaceFragment(stopFragment);
+    }
+
+    @Override
+    public void onStopClick(int stopId) {
+
     }
 }
