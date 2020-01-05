@@ -43,6 +43,12 @@ public class StopAdapter extends CursorAdapter {
         cursor.moveToFirst();
         cursor.move(i);
         Stop stop = new Stop();
+        stop.setId(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns._ID)));
+        stop.setStopDesc(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.DESCRIPTION)));
+        stop.setStopName(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.NAME)));
+        stop.setStopLat(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.LATITUDE)));
+        stop.setStopLon(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.LONGITUDE)));
+        stop.setWheelchairBoarding(Integer.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.WHEELCHAIR_BOARDING))));
         return stop;
     }
 
@@ -50,7 +56,7 @@ public class StopAdapter extends CursorAdapter {
     public long getItemId(int i) {
         cursor.moveToFirst();
         cursor.move(i);
-        return cursor.getLong(0);
+        return cursor.getInt(0);
     }
 
     @Override

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
      */
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -57,5 +58,16 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
     @Override
     public void onStopClick(int stopId) {
 
+    }
+
+    /**
+     * Disable back press for the first fragment
+     */
+    @Override
+    public void onBackPressed() {
+        int count = this.getSupportFragmentManager().getBackStackEntryCount();
+        if (count > 1) {
+            super.onBackPressed();
+        }
     }
 }

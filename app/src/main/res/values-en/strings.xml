@@ -10,4 +10,5 @@
     <string name="title_notification">New version available</string>
     <string name="content_notification">Click to download</string>
     <string name="progressbar_initialize">Initialization</string>
+    <string name="pick_stoptime">Pick time</string>
 </resources>

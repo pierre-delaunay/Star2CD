@@ -82,7 +82,7 @@ public class StopFragment extends Fragment {
         ListView list = view.findViewById(R.id.list);
 
         String[] params = {String.valueOf(routeId), String.valueOf(direction)};
-        //Log.i("StopFragment", routeId + " " + direction);
+
         Cursor cursor = getContext().getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,
                 null, null, params, null);
@@ -93,7 +93,7 @@ public class StopFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), " " + stopAdapter.getItem(i).getStopName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), stopAdapter.getItem(i).getStopName(), Toast.LENGTH_SHORT).show();
             }
         });
 

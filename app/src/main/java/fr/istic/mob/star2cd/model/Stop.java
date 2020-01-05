@@ -1,10 +1,12 @@
 package fr.istic.mob.star2cd.model;
 
 import androidx.annotation.NonNull;
+
 /**
  * Stop model
- * @version 1.0.1
+ *
  * @author Charly C, Pierre D
+ * @version 1.0.1
  */
 public class Stop {
 

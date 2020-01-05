@@ -2,8 +2,9 @@ package fr.istic.mob.star2cd.model;
 
 /**
  * Bus Route Model
- * @version 1.0.1
+ *
  * @author Charly C, Pierre D
+ * @version 1.0.1
  */
 public class BusRoute {
 
