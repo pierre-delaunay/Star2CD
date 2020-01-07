@@ -3,6 +3,7 @@ package fr.istic.mob.star2cd.fragments;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class StopFragment extends Fragment {
         ListView list = view.findViewById(R.id.list);
 
         String[] params = {String.valueOf(routeId), String.valueOf(direction)};
+        Log.i("PARAMS : ", String.valueOf(routeId) + " " + String.valueOf(direction));
 
         Cursor cursor = getContext().getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,

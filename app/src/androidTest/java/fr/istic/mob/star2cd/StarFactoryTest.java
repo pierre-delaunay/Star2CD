@@ -1,6 +1,7 @@
 package fr.istic.mob.star2cd;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -47,7 +48,7 @@ public class StarFactoryTest {
 
     @Test
     public void getStopsCursorTest() {
-        List<Stop> stops = StarFactory.getStops(InstrumentationRegistry.getInstrumentation().getTargetContext(), "1", "1");
+        List<Stop> stops = StarFactory.getStops(InstrumentationRegistry.getInstrumentation().getTargetContext(), "50", "1");
         assertNotNull(stops);
     }
 

@@ -5,12 +5,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.List;
 
 import fr.istic.mob.star2cd.fragments.BusRouteFragment;
 import fr.istic.mob.star2cd.fragments.RouteDetailFragment;
 import fr.istic.mob.star2cd.fragments.StopFragment;
 import fr.istic.mob.star2cd.fragments.StopTimeFragment;
+import fr.istic.mob.star2cd.model.Stop;
+import fr.istic.mob.star2cd.utils.StarFactory;
 
 /**
  * Main Activity
@@ -33,6 +39,12 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
         BusRouteFragment busRouteFragment = BusRouteFragment.newInstance();
 
         replaceFragment(busRouteFragment);
+        /*
+        List<Stop> stops =  StarFactory.getStops(this, "5", "1");
+        for (Stop stop : stops) {
+            Log.i("STOPS : ", stop.getStopName());
+        }
+         */
     }
 
     /**
