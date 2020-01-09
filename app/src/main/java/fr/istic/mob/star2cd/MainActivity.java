@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
     }
 
     @Override
-    public void onStopClick(int stopId) {
-
+    public void onStopClick(int stopId, int routeId, int direction) {
+        StopTimeFragment stopTimeFragment = StopTimeFragment.newInstance(stopId, routeId, direction);
+        replaceFragment(stopTimeFragment);
     }
 
     /**

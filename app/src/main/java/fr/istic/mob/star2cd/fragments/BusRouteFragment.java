@@ -24,9 +24,11 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import fr.istic.mob.star2cd.R;
+import fr.istic.mob.star2cd.model.BusRoute;
 import fr.istic.mob.star2cd.utils.BusRoutesAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
@@ -181,11 +183,12 @@ public class BusRouteFragment extends Fragment {
                 StarContract.BusRoutes.CONTENT_URI, null, null, null, null);
 
         Objects.requireNonNull(cursor);
-        while (cursor.moveToNext()) {
-            String shortName = cursor.getString(cursor.getColumnIndex(StarContract.BusRoutes.BusRouteColumns.SHORT_NAME));
-            String color = cursor.getString(cursor.getColumnIndex(StarContract.BusRoutes.BusRouteColumns.COLOR));
-            busRoutesStr.add(shortName);
-            busRoutesColors.add("#" + color);
+
+        final List<BusRoute> busRoutes = StarFactory.getAllBusRoutes(getContext());
+
+        for (BusRoute busRoute : busRoutes) {
+            busRoutesStr.add(busRoute.getRouteShortName());
+            busRoutesColors.add("#" + busRoute.getRouteColor());
         }
 
         final ArrayAdapter<String> adapter = new BusRoutesAdapter(
@@ -196,8 +199,9 @@ public class BusRouteFragment extends Fragment {
         spinnerBusLine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                initSpinnerBusDirection(position + 1);
-                setRouteId(position + 1);
+                int busRouteId = busRoutes.get(position).getId();
+                initSpinnerBusDirection(busRouteId);
+                setRouteId(busRouteId);
             }
 
             @Override

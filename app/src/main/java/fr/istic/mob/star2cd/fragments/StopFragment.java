@@ -46,7 +46,7 @@ public class StopFragment extends Fragment {
     }
 
     public interface StopFragmentListener {
-        void onStopClick(int stopId);
+        void onStopClick(int stopId, int routeId, int direction);
     }
 
     public static StopFragment newInstance(int routeId, int direction) {
@@ -66,6 +66,7 @@ public class StopFragment extends Fragment {
         super.onDetach();
         fragmentListener = null;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class StopFragment extends Fragment {
         ListView list = view.findViewById(R.id.list);
 
         String[] params = {String.valueOf(routeId), String.valueOf(direction)};
-        Log.i("PARAMS : ", String.valueOf(routeId) + " " + String.valueOf(direction));
+        //Log.i("PARAMS : ", String.valueOf(routeId) + " " + String.valueOf(direction));
 
         Cursor cursor = getContext().getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,
@@ -95,7 +96,8 @@ public class StopFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), stopAdapter.getItem(i).getStopName(), Toast.LENGTH_SHORT).show();
+                int chosenStopId = Integer.valueOf(stopAdapter.getItem(i).getId());
+                fragmentListener.onStopClick(chosenStopId, routeId, direction);
             }
         });
 

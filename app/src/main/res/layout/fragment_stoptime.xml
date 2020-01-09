@@ -6,7 +6,7 @@
     android:background="@color/colorBackground">
 
     <fr.istic.mob.star2cd.utils.CircularTextView
-        android:id="@+id/circularTextView"
+        android:id="@+id/stopTimesCTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
         android:id="@+id/stopTimesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/circularTextView"
+        android:layout_below="@id/stopTimesCTV"
         android:layout_centerHorizontal="true"
         android:text="@string/pick_stoptime"
         android:textSize="16sp" />

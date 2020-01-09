@@ -1,14 +1,32 @@
 package fr.istic.mob.star2cd.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.List;
+import java.util.Objects;
+
+import fr.istic.mob.star2cd.R;
+import fr.istic.mob.star2cd.model.BusRoute;
+import fr.istic.mob.star2cd.model.StopTime;
+import fr.istic.mob.star2cd.utils.CircularTextView;
+import fr.istic.mob.star2cd.utils.StarContract;
+import fr.istic.mob.star2cd.utils.StarFactory;
+import fr.istic.mob.star2cd.utils.StopAdapter;
+import fr.istic.mob.star2cd.utils.StopTimeAdapter;
 
 
 /**
@@ -20,12 +38,17 @@ import androidx.fragment.app.Fragment;
 public class StopTimeFragment extends Fragment {
 
     private StopTimeFragmentListener fragmentListener;
+    private int routeId, stopId, direction;
+    private String arrivalTime, endDate;
 
-    private StopTimeFragment() {
+    private StopTimeFragment(int stopId, int routeId, int direction) {
+        this.stopId = stopId;
+        this.routeId = routeId;
+        this.direction = direction;
     }
 
-    public static StopTimeFragment newInstance() {
-        return new StopTimeFragment();
+    public static StopTimeFragment newInstance(int stopId, int routeId, int direction) {
+        return new StopTimeFragment(stopId, routeId, direction);
     }
 
     public interface StopTimeFragmentListener {
@@ -35,7 +58,7 @@ public class StopTimeFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (getActivity() instanceof BusRouteFragment.BusRouteFragmentListener) {
+        if (getActivity() instanceof StopTimeFragment.StopTimeFragmentListener) {
             fragmentListener = (StopTimeFragment.StopTimeFragmentListener) getActivity();
         }
     }
@@ -59,6 +82,41 @@ public class StopTimeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_stoptime, container, false);
+        ListView list = view.findViewById(R.id.list);
+
+        Log.i("STOPTIME", String.valueOf(stopId));
+
+        // selectionArgs[0] : stop_id
+        // selectionArgs[1] : route_id
+        // selectionArgs[2] : direction_id
+        // selectionArgs[3] : dayOfTheWeek
+        // selectionArgs[4] : endDate
+        // selectionArgs[5] : arrivalTime
+        String[] params = {String.valueOf(stopId), String.valueOf(routeId), String.valueOf(direction), "tuesday", "20200107", "12:00:00"};
+
+        Cursor cursor = getContext().getContentResolver().query(
+                StarContract.StopTimes.CONTENT_URI,
+                null, null, params, null);
+
+        final StopTimeAdapter stopTimeAdapter = new StopTimeAdapter(getContext(), cursor);
+        list.setAdapter(stopTimeAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getContext(), stopTimeAdapter.getItem(i).getArrivalTime(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        BusRoute busRoute = StarFactory.getBusRoute(getContext(), routeId);
+        CircularTextView busTextView = view.findViewById(R.id.stopTimesCTV);
+        Objects.requireNonNull(busRoute);
+        busTextView.setStrokeWidth(1);
+        busTextView.setText(busRoute.getRouteShortName());
+        busTextView.setStrokeColor("#" + busRoute.getRouteTextColor());
+        busTextView.setSolidColor("#" + busRoute.getRouteColor());
+
+        return view;
     }
 }

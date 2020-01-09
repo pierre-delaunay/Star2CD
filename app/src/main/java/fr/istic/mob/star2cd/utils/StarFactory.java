@@ -111,7 +111,8 @@ public class StarFactory {
     public static List<StopTime> getStopTimesAtStop(Context context, String stopId, String routeId, String endDate, String arrivalTime) {
         List<StopTime> stopTimes = new ArrayList<>();
 
-        String[] params = {stopId, routeId, endDate, arrivalTime};
+        String dayOfTheWeek = StarUtility.dayOfTheWeek(endDate);
+        String[] params = {stopId, routeId, endDate, arrivalTime, dayOfTheWeek};
 
         Cursor cursor = context.getContentResolver().query(
                 StarContract.StopTimes.CONTENT_URI,
