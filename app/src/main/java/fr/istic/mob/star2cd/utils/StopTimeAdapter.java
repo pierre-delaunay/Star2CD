@@ -9,7 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import fr.istic.mob.star2cd.R;
-import fr.istic.mob.star2cd.model.Stop;
 import fr.istic.mob.star2cd.model.StopTime;
 
 /**
@@ -34,9 +33,9 @@ public class StopTimeAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView stopTextview = (TextView) view;
-        String stopName = cursor.getString(cursor.getColumnIndexOrThrow("arrival_time"));
-        stopTextview.setText(stopName);
+        TextView stopTimeTextView = (TextView) view;
+        String arrivalTime = cursor.getString(cursor.getColumnIndexOrThrow("arrival_time"));
+        stopTimeTextView.setText(arrivalTime);
     }
 
     @Override

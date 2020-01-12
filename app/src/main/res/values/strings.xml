@@ -11,4 +11,6 @@
     <string name="content_notification">Cliquez ici pour télécharger</string>
     <string name="progressbar_initialize">Initialisation</string>
     <string name="pick_stoptime">Choisir un horaire de passage</string>
+    <string name="empty_inputs_message">Veuillez choisir une date et une heure.</string>
+    <string name="route_detail_title">Détails de votre itinéraire</string>
 </resources>

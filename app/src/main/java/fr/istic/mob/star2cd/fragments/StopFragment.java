@@ -3,14 +3,12 @@ package fr.istic.mob.star2cd.fragments;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,8 +34,15 @@ public class StopFragment extends Fragment {
     private int routeId;
     private int direction;
     private StopFragmentListener fragmentListener;
+    private Context mContext;
 
-    public StopFragment() {
+    /**
+     * Static factory
+     *
+     * @return new instance of StopFragment
+     */
+    public static StopFragment newInstance(int routeId, int direction) {
+        return new StopFragment(routeId, direction);
     }
 
     private StopFragment(int routeId, int direction) {
@@ -46,16 +51,21 @@ public class StopFragment extends Fragment {
     }
 
     public interface StopFragmentListener {
-        void onStopClick(int stopId, int routeId, int direction);
-    }
 
-    public static StopFragment newInstance(int routeId, int direction) {
-        return new StopFragment(routeId, direction);
+        /**
+         * Triggered after a click on a stop
+         *
+         * @param stopId    stop identifier
+         * @param routeId   route identifier
+         * @param direction direction
+         */
+        void onStopClick(int stopId, int routeId, int direction);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
         if (getActivity() instanceof BusRouteFragment.BusRouteFragmentListener) {
             fragmentListener = (StopFragment.StopFragmentListener) getActivity();
         }
@@ -86,7 +96,7 @@ public class StopFragment extends Fragment {
         String[] params = {String.valueOf(routeId), String.valueOf(direction)};
         //Log.i("PARAMS : ", String.valueOf(routeId) + " " + String.valueOf(direction));
 
-        Cursor cursor = getContext().getContentResolver().query(
+        Cursor cursor = mContext.getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,
                 null, null, params, null);
 

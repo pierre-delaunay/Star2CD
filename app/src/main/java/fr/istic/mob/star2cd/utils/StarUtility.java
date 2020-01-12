@@ -80,7 +80,6 @@ public class StarUtility {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyymmdd", Locale.ENGLISH);
             Date chosenDate = simpleDateFormat.parse(dateString);
-            Calendar calendar = Calendar.getInstance();
             if (chosenDate != null) {
                 return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(chosenDate).toLowerCase();
             }

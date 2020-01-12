@@ -11,4 +11,6 @@
     <string name="content_notification">Click to download</string>
     <string name="progressbar_initialize">Initialization</string>
     <string name="pick_stoptime">Pick time</string>
+    <string name="empty_inputs_message">You must choose a date and time.</string>
+    <string name="route_detail_title">Route detail</string>
 </resources>

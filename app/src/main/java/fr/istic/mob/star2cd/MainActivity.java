@@ -11,6 +11,7 @@ import fr.istic.mob.star2cd.fragments.BusRouteFragment;
 import fr.istic.mob.star2cd.fragments.RouteDetailFragment;
 import fr.istic.mob.star2cd.fragments.StopFragment;
 import fr.istic.mob.star2cd.fragments.StopTimeFragment;
+import fr.istic.mob.star2cd.model.StopTime;
 
 
 /**
@@ -19,10 +20,8 @@ import fr.istic.mob.star2cd.fragments.StopTimeFragment;
  * @author Charly C, Pierre D
  * @version 1.0.1
  */
-public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener, StopFragment.StopFragmentListener {
+public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener, StopFragment.StopFragmentListener, StopTimeFragment.StopTimeFragmentListener {
 
-    private StopTimeFragment stopTimesFragment;
-    private RouteDetailFragment routeDetailFragment;
     private FragmentManager fragmentManager;
 
     @Override
@@ -60,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
     public void onStopClick(int stopId, int routeId, int direction) {
         StopTimeFragment stopTimeFragment = StopTimeFragment.newInstance(stopId, routeId, direction);
         replaceFragment(stopTimeFragment);
+    }
+
+    @Override
+    public void onStopTimeClick(StopTime chosenStopTime, int routeId) {
+        RouteDetailFragment routeDetailFragment = RouteDetailFragment.newInstance(chosenStopTime, routeId);
+        replaceFragment(routeDetailFragment);
     }
 
     /**

@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.List;
 import java.util.Objects;
 
 import fr.istic.mob.star2cd.R;
@@ -25,9 +23,8 @@ import fr.istic.mob.star2cd.model.StopTime;
 import fr.istic.mob.star2cd.utils.CircularTextView;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
-import fr.istic.mob.star2cd.utils.StopAdapter;
+import fr.istic.mob.star2cd.utils.StarUtility;
 import fr.istic.mob.star2cd.utils.StopTimeAdapter;
-
 
 /**
  * Stop Time Fragment
@@ -39,7 +36,16 @@ public class StopTimeFragment extends Fragment {
 
     private StopTimeFragmentListener fragmentListener;
     private int routeId, stopId, direction;
-    private String arrivalTime, endDate;
+    private Context mContext;
+
+    /**
+     * Static factory
+     *
+     * @return new instance of StopTimeFragment
+     */
+    public static StopTimeFragment newInstance(int stopId, int routeId, int direction) {
+        return new StopTimeFragment(stopId, routeId, direction);
+    }
 
     private StopTimeFragment(int stopId, int routeId, int direction) {
         this.stopId = stopId;
@@ -47,17 +53,20 @@ public class StopTimeFragment extends Fragment {
         this.direction = direction;
     }
 
-    public static StopTimeFragment newInstance(int stopId, int routeId, int direction) {
-        return new StopTimeFragment(stopId, routeId, direction);
-    }
-
     public interface StopTimeFragmentListener {
-        void foo();
+
+        /**
+         * Triggered after a click on stop time
+         * @param chosenStopTime chosen StopTime
+         * @param routeId route identifier
+         */
+        void onStopTimeClick(StopTime chosenStopTime, int routeId);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
         if (getActivity() instanceof StopTimeFragment.StopTimeFragmentListener) {
             fragmentListener = (StopTimeFragment.StopTimeFragmentListener) getActivity();
         }
@@ -93,9 +102,15 @@ public class StopTimeFragment extends Fragment {
         // selectionArgs[3] : dayOfTheWeek
         // selectionArgs[4] : endDate
         // selectionArgs[5] : arrivalTime
-        String[] params = {String.valueOf(stopId), String.valueOf(routeId), String.valueOf(direction), "tuesday", "20200107", "12:00:00"};
+        String arrivalTime = StarUtility.retrieveFromSharedPrefs(mContext, "time");
+        String endDate = StarUtility.retrieveFromSharedPrefs(mContext, "date");
+        String day = StarUtility.dayOfTheWeek(endDate);
 
-        Cursor cursor = getContext().getContentResolver().query(
+        Log.i("STOPTIME", "arrival time : " + arrivalTime + " endDate : " + endDate + " day " + day);
+
+        String[] params = {String.valueOf(stopId), String.valueOf(routeId), String.valueOf(direction), day, endDate, arrivalTime};
+
+        Cursor cursor = mContext.getContentResolver().query(
                 StarContract.StopTimes.CONTENT_URI,
                 null, null, params, null);
 
@@ -106,6 +121,8 @@ public class StopTimeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getContext(), stopTimeAdapter.getItem(i).getArrivalTime(), Toast.LENGTH_SHORT).show();
+                StopTime chosenStopTime = stopTimeAdapter.getItem(i);
+                fragmentListener.onStopTimeClick(chosenStopTime, routeId);
             }
         });
 

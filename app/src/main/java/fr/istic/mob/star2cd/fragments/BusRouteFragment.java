@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ import fr.istic.mob.star2cd.model.BusRoute;
 import fr.istic.mob.star2cd.utils.BusRoutesAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
+import fr.istic.mob.star2cd.utils.StarUtility;
 
 /**
  * Bus Route Fragment
@@ -42,15 +44,35 @@ import fr.istic.mob.star2cd.utils.StarFactory;
 public class BusRouteFragment extends Fragment {
 
     private Spinner spinnerBusLine, spinnerBusDirection;
-    private Button searchButton, dateButton, timeButton;
     private EditText dateEditText, timeEditText;
     private BusRouteFragmentListener fragmentListener;
     private int routeId, direction;
+    private Context mContext;
+
+    private void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
+
+    private void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public interface BusRouteFragmentListener {
+
+        /**
+         * Triggered after a click on Search button
+         *
+         * @param routeId   route identifier
+         * @param direction direction
+         */
         void searchOnClick(int routeId, int direction);
     }
 
+    /**
+     * Static factory
+     *
+     * @return new instance of BusRouteFragment
+     */
     public static BusRouteFragment newInstance() {
         return new BusRouteFragment();
     }
@@ -58,6 +80,7 @@ public class BusRouteFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
         if (getActivity() instanceof BusRouteFragmentListener) {
             fragmentListener = (BusRouteFragmentListener) getActivity();
         }
@@ -86,9 +109,9 @@ public class BusRouteFragment extends Fragment {
 
         this.spinnerBusLine = view.findViewById(R.id.spinnerBusLine);
         this.spinnerBusDirection = view.findViewById(R.id.spinnerBusDirection);
-        this.dateButton = view.findViewById(R.id.dateButton);
-        this.timeButton = view.findViewById(R.id.timeButton);
-        this.searchButton = view.findViewById(R.id.searchButton);
+        Button dateButton = view.findViewById(R.id.dateButton);
+        Button timeButton = view.findViewById(R.id.timeButton);
+        Button searchButton = view.findViewById(R.id.searchButton);
         this.dateEditText = view.findViewById(R.id.dateEditText);
         this.timeEditText = view.findViewById(R.id.timeEditText);
 
@@ -113,7 +136,14 @@ public class BusRouteFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (fragmentListener != null) {
-                    fragmentListener.searchOnClick(routeId, direction);
+                    if (!dateEditText.getText().toString().equals("") && !timeEditText.getText().toString().equals("")) {
+                        String date = StarUtility.convertDateToDB(dateEditText.getText().toString());
+                        StarUtility.storeInSharedPrefs(mContext, "date", date);
+                        StarUtility.storeInSharedPrefs(mContext, "time", timeEditText.getText().toString());
+                        fragmentListener.searchOnClick(routeId, direction);
+                    } else {
+                        Toast.makeText(mContext, getString(R.string.empty_inputs_message), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -133,7 +163,7 @@ public class BusRouteFragment extends Fragment {
         int MONTH = calendar.get(Calendar.MONTH);
         int DATE = calendar.get(Calendar.DATE);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
@@ -179,12 +209,12 @@ public class BusRouteFragment extends Fragment {
     private void initSpinnerBusLine() {
         ArrayList<String> busRoutesStr = new ArrayList<>();
         ArrayList<String> busRoutesColors = new ArrayList<>();
-        Cursor cursor = getContext().getContentResolver().query(
+        Cursor cursor = mContext.getContentResolver().query(
                 StarContract.BusRoutes.CONTENT_URI, null, null, null, null);
 
         Objects.requireNonNull(cursor);
 
-        final List<BusRoute> busRoutes = StarFactory.getAllBusRoutes(getContext());
+        final List<BusRoute> busRoutes = StarFactory.getAllBusRoutes(mContext);
 
         for (BusRoute busRoute : busRoutes) {
             busRoutesStr.add(busRoute.getRouteShortName());
@@ -219,7 +249,7 @@ public class BusRouteFragment extends Fragment {
         this.spinnerBusDirection.setVisibility(View.VISIBLE);
         String longName = "";
         try {
-            longName = StarFactory.getBusRoute(getContext(), routeId).getRouteLongName();
+            longName = StarFactory.getBusRoute(mContext, routeId).getRouteLongName();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -228,7 +258,7 @@ public class BusRouteFragment extends Fragment {
         arrayList.add(splits[0]);
         arrayList.add(splits[splits.length - 1]);
         Objects.requireNonNull(getContext());
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, arrayList);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, arrayList);
 
         spinnerBusDirection.setAdapter(arrayAdapter);
 
@@ -242,13 +272,5 @@ public class BusRouteFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-    }
-
-    private void setRouteId(int routeId) {
-        this.routeId = routeId;
-    }
-
-    private void setDirection(int direction) {
-        this.direction = direction;
     }
 }
