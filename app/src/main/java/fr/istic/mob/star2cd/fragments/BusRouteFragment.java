@@ -30,7 +30,7 @@ import java.util.Objects;
 
 import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.model.BusRoute;
-import fr.istic.mob.star2cd.utils.BusRoutesAdapter;
+import fr.istic.mob.star2cd.adapters.BusRoutesAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
 import fr.istic.mob.star2cd.utils.StarUtility;
@@ -265,7 +265,11 @@ public class BusRouteFragment extends Fragment {
         spinnerBusDirection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setDirection(position);
+                if (position == 1) {
+                    setDirection(0);
+                } else {
+                    setDirection(1);
+                }
             }
 
             @Override

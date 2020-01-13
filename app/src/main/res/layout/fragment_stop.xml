@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
     <fr.istic.mob.star2cd.utils.CircularTextView
         android:id="@+id/circularTextView"
@@ -13,7 +13,7 @@
         android:layout_marginTop="8dp"
         android:padding="3dp"
         android:text="C1"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/directionTextView"

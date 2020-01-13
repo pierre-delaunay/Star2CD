@@ -1,4 +1,4 @@
-package fr.istic.mob.star2cd.utils;
+package fr.istic.mob.star2cd.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,18 +9,20 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import fr.istic.mob.star2cd.R;
+import fr.istic.mob.star2cd.model.Stop;
+import fr.istic.mob.star2cd.utils.StarContract;
 
 /**
- * Route Detail Adapter
+ * Stop Adapter
  *
  * @author Charly C, Pierre D
  * @version 1.0.1
  */
-public class RouteDetailAdapter extends CursorAdapter {
+public class StopAdapter extends CursorAdapter {
 
     private Cursor cursor;
 
-    public RouteDetailAdapter(Context context, Cursor cursor) {
+    public StopAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
         this.cursor = cursor;
     }
@@ -32,19 +34,23 @@ public class RouteDetailAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView routeDetailTextView = (TextView) view;
+        TextView stopTextview = (TextView) view;
         String stopName = cursor.getString(cursor.getColumnIndexOrThrow("stop_name"));
-        String arrivalTime = cursor.getString(cursor.getColumnIndexOrThrow("arrival_time"));
-        routeDetailTextView.setText(stopName + " @ "  + arrivalTime);
+        stopTextview.setText(stopName);
     }
 
     @Override
-    public String[] getItem(int i) {
+    public Stop getItem(int i) {
         cursor.moveToFirst();
         cursor.move(i);
-        String[] values = {cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.NAME)),
-                cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME))};
-        return values;
+        Stop stop = new Stop();
+        stop.setId(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns._ID)));
+        stop.setStopDesc(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.DESCRIPTION)));
+        stop.setStopName(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.NAME)));
+        stop.setStopLat(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.LATITUDE)));
+        stop.setStopLon(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.LONGITUDE)));
+        stop.setWheelchairBoarding(Integer.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.Stops.StopColumns.WHEELCHAIR_BOARDING))));
+        return stop;
     }
 
     @Override

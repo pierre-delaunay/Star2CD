@@ -13,4 +13,5 @@
     <string name="pick_stoptime">Pick time</string>
     <string name="empty_inputs_message">You must choose a date and time.</string>
     <string name="route_detail_title">Route detail</string>
+    <string name="search_title">Search</string>
 </resources>

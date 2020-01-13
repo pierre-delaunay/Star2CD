@@ -1,4 +1,4 @@
-package fr.istic.mob.star2cd.utils;
+package fr.istic.mob.star2cd.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.model.StopTime;
+import fr.istic.mob.star2cd.utils.StarContract;
 
 /**
  * StopTime Adapter

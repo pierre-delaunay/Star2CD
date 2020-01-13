@@ -24,7 +24,7 @@ import fr.istic.mob.star2cd.utils.CircularTextView;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
 import fr.istic.mob.star2cd.utils.StarUtility;
-import fr.istic.mob.star2cd.utils.StopTimeAdapter;
+import fr.istic.mob.star2cd.adapters.StopTimeAdapter;
 
 /**
  * Stop Time Fragment

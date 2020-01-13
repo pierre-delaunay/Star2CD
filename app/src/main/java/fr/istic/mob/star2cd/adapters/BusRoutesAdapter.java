@@ -1,4 +1,4 @@
-package fr.istic.mob.star2cd.utils;
+package fr.istic.mob.star2cd.adapters;
 
 import android.content.Context;
 import android.graphics.Color;

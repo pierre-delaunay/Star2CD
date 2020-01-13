@@ -5,13 +5,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import fr.istic.mob.star2cd.fragments.BusRouteFragment;
 import fr.istic.mob.star2cd.fragments.RouteDetailFragment;
 import fr.istic.mob.star2cd.fragments.StopFragment;
 import fr.istic.mob.star2cd.fragments.StopTimeFragment;
 import fr.istic.mob.star2cd.model.StopTime;
+import fr.istic.mob.star2cd.adapters.SearchAdapter;
+import fr.istic.mob.star2cd.utils.StarContract;
 
 
 /**
@@ -23,11 +30,15 @@ import fr.istic.mob.star2cd.model.StopTime;
 public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener, StopFragment.StopFragmentListener, StopTimeFragment.StopTimeFragmentListener {
 
     private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private SearchView searchView;
+    private boolean isTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         fragmentManager = this.getSupportFragmentManager();
         BusRouteFragment busRouteFragment = BusRouteFragment.newInstance();
@@ -42,9 +53,25 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
      * @param fragment the new fragment
      */
     private void replaceFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        /*
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+         */
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+
+        if (!isTablet) {
+            fragmentTransaction.replace(R.id.frameLayout, fragment);
+        } else {
+            if (!(fragment instanceof BusRouteFragment)) {
+                fragmentTransaction.replace(R.id.frameLayout2, fragment);
+            } else {
+                fragmentTransaction.replace(R.id.frameLayout, fragment);
+            }
+        }
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -72,9 +99,39 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
      */
     @Override
     public void onBackPressed() {
-        int count = this.getSupportFragmentManager().getBackStackEntryCount();
-        if (count > 1) {
+        if (fragmentManager.getBackStackEntryCount() > 1) {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setIconified(true);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setContentView(R.layout.search_view);
+                ListView list = findViewById(R.id.searchList);
+
+                final Cursor cursor = getContentResolver().query(
+                        StarContract.Search.CONTENT_URI,
+                        null, query.trim(), null, null);
+                final SearchAdapter searchAdapter = new SearchAdapter(getApplicationContext(), cursor);
+                list.setAdapter(searchAdapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 }

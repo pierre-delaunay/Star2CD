@@ -13,4 +13,5 @@
     <string name="pick_stoptime">Choisir un horaire de passage</string>
     <string name="empty_inputs_message">Veuillez choisir une date et une heure.</string>
     <string name="route_detail_title">Détails de votre itinéraire</string>
+    <string name="search_title">Rechercher</string>
 </resources>

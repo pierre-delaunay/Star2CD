@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +20,7 @@ import fr.istic.mob.star2cd.R;
 import fr.istic.mob.star2cd.model.BusRoute;
 import fr.istic.mob.star2cd.model.StopTime;
 import fr.istic.mob.star2cd.utils.CircularTextView;
-import fr.istic.mob.star2cd.utils.RouteDetailAdapter;
+import fr.istic.mob.star2cd.adapters.RouteDetailAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
 import fr.istic.mob.star2cd.utils.StarFactory;
 
@@ -86,7 +85,7 @@ public class RouteDetailFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "pick", Toast.LENGTH_SHORT).show();
+                // do nothing
             }
         });
 
