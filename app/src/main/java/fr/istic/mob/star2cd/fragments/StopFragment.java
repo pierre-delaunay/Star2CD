@@ -94,7 +94,6 @@ public class StopFragment extends Fragment {
         ListView list = view.findViewById(R.id.list);
 
         String[] params = {String.valueOf(routeId), String.valueOf(direction)};
-        //Log.i("PARAMS : ", String.valueOf(routeId) + " " + String.valueOf(direction));
 
         Cursor cursor = mContext.getContentResolver().query(
                 StarContract.Stops.CONTENT_URI,

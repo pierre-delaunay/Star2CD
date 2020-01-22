@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private SearchView searchView;
     private boolean isTablet;
 
     @Override
@@ -103,14 +102,16 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
             super.onBackPressed();
         }
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) searchItem.getActionView();
-        searchView.setIconified(true);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setIconified(false);
+        searchView.setQueryHint(getString(R.string.search_view_hint));
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

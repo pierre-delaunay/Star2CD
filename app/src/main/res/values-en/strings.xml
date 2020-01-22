@@ -14,4 +14,5 @@
     <string name="empty_inputs_message">You must choose a date and time.</string>
     <string name="route_detail_title">Route detail</string>
     <string name="search_title">Search</string>
+    <string name="search_view_hint">Bus stop name</string>
 </resources>
