@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import fr.istic.mob.star2cd.R;
@@ -32,7 +34,7 @@ public class BusRoutesAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
 
         if (row == null) {
@@ -44,7 +46,7 @@ public class BusRoutesAdapter extends ArrayAdapter<String> {
         String colorItem = colors.get(position);
 
         if (item != null) {
-            final TextView text1 = (TextView) row.findViewById(R.id.itemId);
+            final TextView text1 = row.findViewById(R.id.itemId);
 
             text1.setText(item);
             try {

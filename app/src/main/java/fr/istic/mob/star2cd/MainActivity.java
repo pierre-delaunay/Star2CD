@@ -20,7 +20,6 @@ import fr.istic.mob.star2cd.model.StopTime;
 import fr.istic.mob.star2cd.adapters.SearchAdapter;
 import fr.istic.mob.star2cd.utils.StarContract;
 
-
 /**
  * Main Activity
  *
@@ -30,7 +29,6 @@ import fr.istic.mob.star2cd.utils.StarContract;
 public class MainActivity extends AppCompatActivity implements BusRouteFragment.BusRouteFragmentListener, StopFragment.StopFragmentListener, StopTimeFragment.StopTimeFragmentListener {
 
     private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
     private boolean isTablet;
 
     @Override
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isTablet = getResources().getBoolean(R.bool.isTablet);
-
         fragmentManager = this.getSupportFragmentManager();
         BusRouteFragment busRouteFragment = BusRouteFragment.newInstance();
 
@@ -52,14 +49,7 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
      * @param fragment the new fragment
      */
     private void replaceFragment(Fragment fragment) {
-        /*
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-         */
-        fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
 
         if (!isTablet) {
@@ -102,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
             super.onBackPressed();
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -111,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements BusRouteFragment.
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setIconified(false);
         searchView.setQueryHint(getString(R.string.search_view_hint));
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

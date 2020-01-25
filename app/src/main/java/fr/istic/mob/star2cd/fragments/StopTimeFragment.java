@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,8 +56,9 @@ public class StopTimeFragment extends Fragment {
 
         /**
          * Triggered after a click on stop time
+         *
          * @param chosenStopTime chosen StopTime
-         * @param routeId route identifier
+         * @param routeId        route identifier
          */
         void onStopTimeClick(StopTime chosenStopTime, int routeId);
     }
@@ -120,7 +120,6 @@ public class StopTimeFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), stopTimeAdapter.getItem(i).getArrivalTime(), Toast.LENGTH_SHORT).show();
                 StopTime chosenStopTime = stopTimeAdapter.getItem(i);
                 fragmentListener.onStopTimeClick(chosenStopTime, routeId);
             }
