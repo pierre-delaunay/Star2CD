@@ -20,4 +20,4 @@ Application mobile de recherche d'horaires de bus sur le réseau STAR (métropol
 
 ## Preview
 
-![alt](https://i.imgur.com/NUjROmm.gif)
+![alt](https://i.imgur.com/PP925N0.gif)

@@ -46,7 +46,7 @@ public class StopTimeAdapter extends CursorAdapter {
         StopTime stopTime = new StopTime();
         stopTime.setId(Integer.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns._ID))));
         stopTime.setStopId(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.STOP_ID)));
-        stopTime.setTripId(Integer.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.TRIP_ID))));
+        stopTime.setTripId(Long.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.TRIP_ID))));
         stopTime.setArrivalTime(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)));
         stopTime.setDepartureTime(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.DEPARTURE_TIME)));
         stopTime.setStopSequence(Integer.valueOf(cursor.getString(cursor.getColumnIndex(StarContract.StopTimes.StopTimeColumns.STOP_SEQUENCE))));

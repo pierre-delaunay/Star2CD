@@ -9,7 +9,7 @@ package fr.istic.mob.star2cd.model;
 public class StopTime {
 
     private int id;
-    private int tripId;
+    private long tripId;
     private String arrivalTime;
     private String departureTime;
     private String stopId;
@@ -26,11 +26,11 @@ public class StopTime {
         this.id = id;
     }
 
-    public int getTripId() {
+    public long getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(long tripId) {
         this.tripId = tripId;
     }
 
